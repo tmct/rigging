@@ -1,7 +1,6 @@
 package uk.co.tmmct.rigging;
 
 import android.os.Bundle;
-import android.support.annotation.IntegerRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -11,11 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import java.util.Locale;
+
 public class InputsFragment extends Fragment {
 
-    private EditText catchAngle;
-    private EditText finishAngle;
-    private EditText sweepAngle;
+    private EditText catchAngleView;
+    private EditText finishAngleView;
+    private EditText sweepAngleView;
 
     private TextWatcher updateSweepAngleWatcher = new TextWatcher() {
         @Override
@@ -30,12 +31,12 @@ public class InputsFragment extends Fragment {
 
         @Override
         public void afterTextChanged(Editable editable) {
-            final String catchAngleText = catchAngle.getText().toString();
-            final String finishAngleText = finishAngle.getText().toString();
+            final String catchAngleText = catchAngleView.getText().toString();
+            final String finishAngleText = finishAngleView.getText().toString();
             try {
                 int sweepAngle = Integer.parseInt(catchAngleText) + Integer.parseInt(finishAngleText);
                 sweepAngle %= 360;
-                InputsFragment.this.sweepAngle.setText(Integer.toString(sweepAngle));
+                sweepAngleView.setText(String.format(Locale.ENGLISH, "%d", sweepAngle));
             } catch (NumberFormatException e) {
                 //nowt
             }
@@ -55,15 +56,15 @@ public class InputsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        catchAngle = (EditText) view.findViewById(R.id.catch_angle);
-        finishAngle = (EditText) view.findViewById(R.id.finish_angle);
-        sweepAngle = (EditText) view.findViewById(R.id.sweep_angle);
+        catchAngleView = (EditText) view.findViewById(R.id.catch_angle);
+        finishAngleView = (EditText) view.findViewById(R.id.finish_angle);
+        sweepAngleView = (EditText) view.findViewById(R.id.sweep_angle);
 
         setAngleListeners();
     }
 
     private void setAngleListeners() {
-        catchAngle.addTextChangedListener(updateSweepAngleWatcher);
-        finishAngle.addTextChangedListener(updateSweepAngleWatcher);
+        catchAngleView.addTextChangedListener(updateSweepAngleWatcher);
+        finishAngleView.addTextChangedListener(updateSweepAngleWatcher);
     }
 }
