@@ -18,7 +18,32 @@ public class InputsFragment extends Fragment {
     private EditText finishAngleView;
     private EditText sweepAngleView;
 
-    private TextWatcher updateSweepAngleWatcher = new TextWatcher() {
+    public static Fragment newInstance() {
+        return new InputsFragment();
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_inputs, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        catchAngleView = (EditText) view.findViewById(R.id.catch_angle);
+        finishAngleView = (EditText) view.findViewById(R.id.finish_angle);
+        sweepAngleView = (EditText) view.findViewById(R.id.sweep_angle);
+
+        setAngleListeners();
+    }
+
+    private void setAngleListeners() {
+        catchAngleView.addTextChangedListener(new UpdateSweepAngleTextWatcher());
+        finishAngleView.addTextChangedListener(new UpdateSweepAngleTextWatcher());
+    }
+
+    private class UpdateSweepAngleTextWatcher implements TextWatcher {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -41,30 +66,6 @@ public class InputsFragment extends Fragment {
                 //nowt
             }
         }
-    };
 
-    public static Fragment newInstance() {
-        return new InputsFragment();
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_inputs, container, false);
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        catchAngleView = (EditText) view.findViewById(R.id.catch_angle);
-        finishAngleView = (EditText) view.findViewById(R.id.finish_angle);
-        sweepAngleView = (EditText) view.findViewById(R.id.sweep_angle);
-
-        setAngleListeners();
-    }
-
-    private void setAngleListeners() {
-        catchAngleView.addTextChangedListener(updateSweepAngleWatcher);
-        finishAngleView.addTextChangedListener(updateSweepAngleWatcher);
     }
 }
